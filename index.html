@@ -39,13 +39,20 @@
       // Line Notify APIのURL
       const apiUrl = 'https://notify-api.line.me/api/notify';
 
+      // メッセージの構築
+      const message = [];
+      formData.forEach((value, key) => {
+        message.push(`${key}: ${value}`);
+      });
+
       // フォームデータをLine Notifyに送信
       fetch(apiUrl, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${lineNotifyToken}`
+          'Authorization': `Bearer ${lineNotifyToken}`,
+          'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: formData
+        body: `message=${message.join('\n')}`
       })
         .then(response => {
           if (!response.ok) {
